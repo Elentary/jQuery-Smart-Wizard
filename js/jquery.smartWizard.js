@@ -457,7 +457,24 @@ function SmartWizard(target, options) {
         var allObjs = this.each(function() {
             var wiz = $(this).data('smartWizard');
             if (typeof method == 'object' || ! method || ! wiz) {
+
                 var options = $.extend({}, $.fn.smartWizard.defaults, method || {});
+
+                // handle deprecated reverseButtonsOrder option
+                if(options.reverseButtonsOrder === true)
+                {
+                    options.buttonOrder.reverse()
+                }
+
+                // handle deprecated includeFinishButton option
+                if(options.includeFinishButton === false)
+                {
+                    var index = options.buttonOrder.indexOf('finish');
+                    if (index > -1) {
+                        options.buttonOrder.splice(index, 1);
+                    }
+                }
+
                 if (! wiz) {
                     wiz = new SmartWizard($(this), options);
                     $(this).data('smartWizard', wiz);
